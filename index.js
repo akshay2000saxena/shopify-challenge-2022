@@ -6,8 +6,8 @@ const keys = require("./config/keys");
 const bodyParser = require("body-parser");
 
 // import routes
-const users = require("./routes/Users");
-const photos = require("./routes/Photos");
+const users = require("./routes/api/Users");
+const photos = require("./routes/api/Photos");
 
 // start express
 const app = express();
@@ -21,7 +21,7 @@ require("./config/passport")(passport);
 
 // set up mongodb
 const mongodb = keys.mongoURL;
-mongoose.connect(mongodb, {})
+mongoose.connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected to mongoDB"))
   .catch(err => console.error(err));
 
@@ -34,8 +34,8 @@ cloudinary.config({
 })
 
 // set up user and photo routes
-app.use("/users", users);
-app.use("/photos", photos);
+app.use("/api/users", users);
+app.use("/api/photos", photos);
 
 // home page
 app.get("/", (req, res) => {
@@ -43,4 +43,9 @@ app.get("/", (req, res) => {
 });
 
 
-app.listen(3000, () => console.log("Server is listening to port 3000"));
+// inititialize port
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Listening to port ${port}`));
+
+// export for testing purposes
+module.exports = app;

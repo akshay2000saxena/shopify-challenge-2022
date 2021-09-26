@@ -4,31 +4,25 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 
-const keys = require("../config/keys");
+const keys = require("../../config/keys");
 
 // schemas
-const { User } = require("../models/User");
+const { User } = require("../../models/User");
 
 // validation
-const validateSignUpInput = require("../validation/signUp");
-const validateLoginInput = require("../validation/login");
+const validateRegisterInput = require("../../validation/register");
+const validateLoginInput = require("../../validation/login");
 
-/**
- * Tests that the user endpoints work
- * @route GET api/users/test
- * @group Public
- * @returns {string} Message with expected behaviour
- */
 router.get("/test", (req, res) => res.json({ message: "Users works" }));
 
 router.post("/register", (req, res) => {
-  const { errors, isValid } = validateSignUpInput(req.body);
+  const { errors, isValid } = validateRegisterInput(req.body);
+
 
   // check validation
   if (!isValid) {
     return res.status(400).json(errors);
   }
-
   const { name, email, password } = req.body;
 
   User.findOne({ email }).then(user => {
