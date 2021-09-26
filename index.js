@@ -3,14 +3,19 @@ const passport = require("passport");
 const mongoose = require("mongoose");
 const cloudinary = require("cloudinary");
 const keys = require("./config/keys");
+const bodyParser = require("body-parser");
 
+// import routes
 const users = require("./routes/Users");
 const photos = require("./routes/Photos");
 
+// start express
 const app = express();
 
-
-
+// set up middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(passport.initialize());
 require("./config/passport")(passport);
 
 
@@ -28,8 +33,13 @@ cloudinary.config({
   api_secret: apiSecret
 })
 
-app.get("/", (req, res) => {
+// set up user and photo routes
+app.use("/users", users);
+app.use("/photos", photos);
 
+// home page
+app.get("/", (req, res) => {
+  res.json({ message: "Feel free to add front end here!" });
 });
 
 
