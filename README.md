@@ -11,7 +11,7 @@ This code requires the following prerequisites to build:
 To run the code, follow these steps:
 
 1. `git clone https://github.com/akshay2000saxena/shopify-challenge-2022.git` will copy the code here to your machine
-2. `cd src/` will go into the directory where the code is stored
+2. `cd shopify-challenge-2022/` will go into the directory where the code is stored
 3. `npm i` will install all required dependencies
 4. `node index.js` will start the server locally!
 
