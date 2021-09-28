@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cloudinary = require("cloudinary");
 const keys = require("./config/keys");
 const bodyParser = require("body-parser");
+const swagger = require("express-swagger-generator");
 
 // import routes
 const users = require("./routes/api/Users");
@@ -42,6 +43,31 @@ app.get("/", (req, res) => {
   res.json({ message: "Feel free to add front end here!" });
 });
 
+// hosts up docs on /api-docs
+const expressSwagger = swagger(app);
+expressSwagger({
+  swaggerDefinition: {
+    info: {
+      description: "Documenation",
+      title: "Photo Database Application",
+      version: "1.0.0"
+    },
+    host: "localhost:3000/",
+    basePath: "/",
+    produces: ["application/json", "application/xml"],
+    schemes: ["http", "https"],
+    securityDefinitions: {
+      JWT: {
+        type: "apiKey",
+        in: "header",
+        name: "Authorization",
+        description: ""
+      }
+    }
+  },
+  basedir: __dirname,
+  files: ["./routes/**/*.js", "./models/**/*.js"]
+});
 
 // inititialize port
 const port = process.env.PORT || 3000;

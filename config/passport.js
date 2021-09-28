@@ -10,6 +10,12 @@ const options = {
   secretOrKey: keys.secretOrKey
 };
 
+/**
+ * User validation strategy.
+ *
+ * Returns true in second done argument if user is authenticated,
+ * otherwise false.
+ */
 const strategy = passport => {
   passport.use(
     new JwtStrategy(options, async (jwt_payload, done) => {

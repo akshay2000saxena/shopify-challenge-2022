@@ -13,8 +13,29 @@ const { User } = require("../../models/User");
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
 
+/**
+ * Tests that the user endpoints work
+ * @route GET api/users/test
+ * @group Public
+ * @returns {string} Message with expected behaviour
+ */
 router.get("/test", (req, res) => res.json({ message: "Users works" }));
 
+/**
+ * @typedef RegisterUserModel
+ * @property {string} name.required
+ * @property {string} email.required
+ * @property {string} password.required
+ * @property {string} password2.required
+ */
+
+/**
+ * Uploads photo associated to user
+ * @route POST api/users/register
+ * @group Public
+ * @param {RegisterUserModel.model} data.body
+ * @returns {User} Newly created user object
+ */
 router.post("/register", (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
@@ -59,6 +80,19 @@ router.post("/register", (req, res) => {
   });
 });
 
+/**
+ * @typedef LoginUserModel
+ * @property {string} email.required
+ * @property {string} password.required
+ */
+
+/**
+ * Uploads photo associated to user
+ * @route POST api/users/login
+ * @group Public
+ * @param {LoginUserModel.model} data.body
+ * @returns {User} Personally signed JWT expiring in 24 hours
+ */
 router.post("/login", (req, res) => {
   const { errors, isValid } = validateLoginInput(req.body);
 
@@ -103,6 +137,13 @@ router.post("/login", (req, res) => {
   });
 });
 
+/**
+ * Returns information for current user
+ * @route GET api/users/current
+ * @group Private
+ * @security JWT
+ * @returns {User} Associated user object
+ */
 router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
